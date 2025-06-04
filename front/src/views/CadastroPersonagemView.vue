@@ -101,7 +101,7 @@ async function cadastrarPersonagem() {
   if (!valid.value) return
 
   try {
-    await axios.post('http://localhost:3000s/personagens', {
+    await axios.post('http://localhost:3000/personagens', {
       nome: nome.value,
       dinheiro: parseInt(dinheiro.value, 10),
     })
