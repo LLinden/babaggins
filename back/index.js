@@ -159,6 +159,38 @@ app.put("/personagens/:id/dinheiro", (req, res) => {
   });
 });
 
+// Atualizar um item (ex: quantidade)
+app.put("/itens/:id", (req, res) => {
+  const { id } = req.params;
+  const { nome_item, descricao, quantidade } = req.body;
+
+  if (quantidade < 0) {
+    return res.status(400).send("A quantidade não pode ser negativa.");
+  }
+
+  db.run(
+    "UPDATE itens SET nome_item = ?, descricao = ?, quantidade = ? WHERE id = ?",
+    [nome_item, descricao, quantidade, id],
+    function (err) {
+      if (err) return res.status(500).send("Erro ao atualizar item.");
+      if (this.changes === 0)
+        return res.status(404).send("Item não encontrado.");
+      res.send({ id, nome_item, descricao, quantidade });
+    }
+  );
+});
+
+// Deletar um item
+app.delete("/itens/:id", (req, res) => {
+  const { id } = req.params;
+
+  db.run("DELETE FROM itens WHERE id = ?", [id], function (err) {
+    if (err) return res.status(500).send("Erro ao deletar item.");
+    if (this.changes === 0) return res.status(404).send("Item não encontrado.");
+    res.send({ mensagem: "Item removido com sucesso", id });
+  });
+});
+
 // Inicia o servidor
 app.listen(3000, () => {
   console.log("Servidor rodando em http://localhost:3000");

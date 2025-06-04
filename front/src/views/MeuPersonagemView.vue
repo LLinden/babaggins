@@ -21,8 +21,29 @@
                 <p><strong>Dinheiro:</strong> {{ personagem.dinheiro }}</p>
                 <p><strong>Itens:</strong></p>
                 <ul>
-                    <li v-for="item in itens" :key="item.id">Nome: {{ item.nome_item }}, Quantidade: {{ item.quantidade }}, Descrição: {{ item.descricao }}</li>
+                    <li v-for="item in itens" :key="item.id">
+                        Nome: {{ item.nome_item }}, Quantidade: {{ item.quantidade }}, Descrição: {{ item.descricao }}
+                        <v-icon color="red" class="ml-2 cursor-pointer"
+                            @click="abrirModal(item)">mdi-minus-circle</v-icon>
+                    </li>
                 </ul>
+
+                <!-- Modal de confirmação -->
+                <v-dialog v-model="dialog" max-width="400">
+                    <v-card>
+                        <v-card-title class="headline">Remover Itens</v-card-title>
+                        <v-card-text>
+                            Quantas unidades deseja remover de <strong>{{ itemSelecionado?.nome_item }}</strong>?
+                            <v-text-field v-model.number="quantidadeARemover" type="number" min="1"
+                                :max="itemSelecionado?.quantidade" label="Quantidade" dense />
+                        </v-card-text>
+                        <v-card-actions>
+                            <v-spacer />
+                            <v-btn text @click="dialog = false">Cancelar</v-btn>
+                            <v-btn color="red" @click="removerItem">Remover</v-btn>
+                        </v-card-actions>
+                    </v-card>
+                </v-dialog>
             </v-col>
         </v-row>
 
@@ -44,6 +65,9 @@ const router = useRouter()
 const nomeBusca = ref('')
 const personagem = ref(null)
 const itens = ref([])
+const dialog = ref(false)
+const itemSelecionado = ref(null)
+const quantidadeARemover = ref(1)
 
 function voltar() {
     router.push({ name: 'Home' })
@@ -74,5 +98,37 @@ async function buscarPersonagem() {
         console.error(error)
         alert('Erro ao buscar personagem.')
     }
+}
+
+function abrirModal(item) {
+  itemSelecionado.value = item
+  quantidadeARemover.value = 1
+  dialog.value = true
+}
+
+async function removerItem() {
+  const item = itemSelecionado.value
+  const novaQuantidade = item.quantidade - quantidadeARemover.value
+
+  try {
+    if (novaQuantidade <= 0) {
+      // Remove o item
+      await axios.delete(`http://localhost:3000/itens/${item.id}`)
+      itens.value = itens.value.filter(i => i.id !== item.id)
+    } else {
+      // Atualiza quantidade do item
+      await axios.put(`http://localhost:3000/itens/${item.id}`, {
+        ...item,
+        quantidade: novaQuantidade
+      })
+      const i = itens.value.findIndex(i => i.id === item.id)
+      if (i !== -1) itens.value[i].quantidade = novaQuantidade
+    }
+
+    dialog.value = false
+  } catch (error) {
+    console.error('Erro ao remover item:', error)
+    alert('Erro ao remover item.')
+  }
 }
 </script>
