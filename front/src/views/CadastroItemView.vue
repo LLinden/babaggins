@@ -12,7 +12,7 @@
                     <label for="nome">Nome do item:</label>
                 </v-col>
                 <v-col cols="auto">
-                    <v-text-field id="nome" v-model="descricao" :rules="nomeRules" maxlength="50" hide-details="auto"
+                    <v-text-field id="nome" v-model="nome" :rules="nomeRules" maxlength="50" hide-details="auto"
                         dense variant="outlined" class="input-field" />
                 </v-col>
             </v-row>

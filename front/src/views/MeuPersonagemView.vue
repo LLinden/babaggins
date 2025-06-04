@@ -21,7 +21,7 @@
                 <p><strong>Dinheiro:</strong> {{ personagem.dinheiro }}</p>
                 <p><strong>Itens:</strong></p>
                 <ul>
-                    <li v-for="item in itens" :key="item.id">{{ item.nome }}</li>
+                    <li v-for="item in itens" :key="item.id">Nome: {{ item.nome_item }}, Quantidade: {{ item.quantidade }}, Descrição: {{ item.descricao }}</li>
                 </ul>
             </v-col>
         </v-row>
