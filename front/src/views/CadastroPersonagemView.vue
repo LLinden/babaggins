@@ -107,7 +107,7 @@ async function cadastrarPersonagem() {
     })
 
     alert('Personagem cadastrado com sucesso!')
-    router.push({ name: 'home' })
+    router.push({ name: 'Home' })
   } catch (error) {
     alert('Erro ao cadastrar personagem.')
     console.error(error)

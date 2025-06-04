@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "@/views/HomeView.vue";
 import CadastrarPersonagemView from "@/views/CadastroPersonagemView.vue";
 import MeuPersonagemView from "@/views/MeuPersonagemView.vue";
+import CadastrarItemView from "@/views/CadastroItemView.vue";
 
 const routes = [
   {
@@ -18,6 +19,11 @@ const routes = [
     path: "/meu-personagem",
     name: "MeuPersonagem",
     component: MeuPersonagemView,
+  },
+  {
+    path: "/cadastrar-item",
+    name: "CadastrarItem",
+    component: CadastrarItemView,
   },
 ];
 

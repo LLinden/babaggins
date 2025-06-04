@@ -38,7 +38,7 @@
           class="home-button"
           color="primary"
           outlined
-          @click="goTo('cadastrar-item')"
+          @click="goTo('CadastrarItem')"
         >
           Cadastrar<br />Item
         </v-btn>
