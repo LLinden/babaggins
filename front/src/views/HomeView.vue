@@ -25,7 +25,7 @@
           class="home-button"
           color="primary"
           outlined
-          @click="goTo('itens-grupo')"
+          @click="goTo('ItensGrupo')"
         >
           Itens do Grupo
         </v-btn>

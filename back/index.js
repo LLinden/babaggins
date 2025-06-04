@@ -109,7 +109,15 @@ app.get("/personagens/:personagem_id", (req, res) => {
   );
 });
 
-// Enpoint para listar itens
+// Enpoint para listar todos os itens
+app.get("/itens", (req, res) => {
+  db.all("SELECT * FROM itens", (err, rows) => {
+    if (err) return res.status(500).send("Erro ao buscar itens.");
+    res.send(rows);
+  });
+});
+
+// Enpoint para listar itens por personagem
 app.get("/itens/:personagem_id", (req, res) => {
   const { personagem_id } = req.params;
 
