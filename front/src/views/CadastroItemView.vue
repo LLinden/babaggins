@@ -1,5 +1,5 @@
 <template>
-    <v-container class="fill-height d-flex flex-column align-center justify-center">
+    <v-container class="fill-height d-flex flex-column align-center justify-start pt-10">
         <v-row justify="center" class="mb-6">
             <v-col cols="12" class="text-center">
                 <h2>Cadastro de Item</h2>
@@ -7,47 +7,35 @@
         </v-row>
 
         <v-form v-model="valid" @submit.prevent="cadastrarItem">
-            <v-row class="align-center mb-3" justify="center">
-                <v-col cols="auto">
-                    <label for="nome">Nome do item:</label>
-                </v-col>
-                <v-col cols="auto">
-                    <v-text-field id="nome" v-model="nome" :rules="nomeRules" maxlength="50" hide-details="auto"
-                        dense variant="outlined" class="input-field" />
+            <v-row justify="center">
+                <v-col cols="12">
+                    <v-text-field class="input-field" label="Nome do item" v-model="nome" :rules="nomeRules" maxlength="50"
+                        hide-details="auto" dense variant="outlined"/>
                 </v-col>
             </v-row>
 
-            <v-row class="align-center mb-3" justify="center">
-                <v-col cols="auto">
-                    <label for="descricao">Descrição:</label>
-                </v-col>
-                <v-col cols="auto">
-                    <v-text-field id="descricao" v-model="descricao" :rules="descricaoRules" maxlength="250"
-                        hide-details="auto" dense variant="outlined" class="input-field" />
+            <v-row justify="center">
+                <v-col cols="12">
+                    <v-text-field class="input-field" label="Descrição" v-model="descricao" :rules="descricaoRules" maxlength="250"
+                        hide-details="auto" dense variant="outlined"/>
                 </v-col>
             </v-row>
 
-            <v-row class="align-center mb-5" justify="center">
-                <v-col cols="auto">
-                    <label for="quantidade">Quantidade:</label>
-                </v-col>
-                <v-col cols="auto">
-                    <v-text-field id="quantidade" v-model="quantidade" :rules="quantidadeRules" maxlength="50"
-                        hide-details="auto" dense variant="outlined" class="input-field" />
+            <v-row justify="center">
+                <v-col cols="12">
+                    <v-text-field class="input-field" label="Quantidade" v-model="quantidade" :rules="quantidadeRules" maxlength="50"
+                        hide-details="auto" dense variant="outlined"/>
                 </v-col>
             </v-row>
 
-            <v-row class="align-center mb-3" justify="center">
-                <v-col cols="auto">
-                    <label for="personagem">Está com qual personagem?</label>
-                </v-col>
-                <v-col cols="auto">
-                    <v-text-field id="personagem" v-model="personagem" :rules="personagemRules" maxlength="50"
-                        hide-details="auto" dense variant="outlined" class="input-field" />
+            <v-row justify="center">
+                <v-col cols="12">
+                    <v-text-field class="input-field" label="Personagem" v-model="personagem" :rules="personagemRules"
+                        maxlength="50" hide-details="auto" dense variant="outlined"/>
                 </v-col>
             </v-row>
 
-            <v-row justify="center" class="mb-2">
+            <v-row justify="center" class="mb-3">
                 <v-col cols="auto">
                     <v-btn color="primary" class="form-button" outlined type="submit">
                         Cadastrar
@@ -132,7 +120,7 @@ async function cadastrarItem() {
 
 <style scoped>
 .input-field {
-    width: 250px;
+    width: 100%;
 }
 
 .form-button {
