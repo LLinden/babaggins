@@ -2,7 +2,7 @@
     <v-container class="fill-height d-flex flex-column align-center justify-center">
         <v-row justify="center">
             <v-col cols="12" class="text-center">
-                <h1>BaBaggins</h1>
+                <h1>💰 BaBaggins 💰</h1>
             </v-col>
         </v-row>
 
@@ -57,11 +57,12 @@ function goTo(routeName) {
 
 <style scoped>
 .home-button {
-    min-width: 140px;
-    min-height: 50px;
-    font-size: 1rem;
+    min-width: 160px;
+    min-height: 60px;
+    font-size: 0.8rem;
     text-transform: none;
     padding: 8px 12px;
+    line-height: 1.3rem;
 }
 
 .v-row {
@@ -74,5 +75,13 @@ function goTo(routeName) {
     padding-left: 4px;
     padding-right: 4px;
     margin-bottom: 8px;
+}
+
+@media (max-width: 600px) {
+    .home-button {
+        font-size: 0.63rem;
+        /* ou outro valor menor que 0.8rem */
+        line-height: 1rem;
+    }
 }
 </style>

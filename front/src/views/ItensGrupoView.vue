@@ -2,7 +2,7 @@
   <v-container class="py-10">
     <v-row justify="center">
       <v-col cols="12" class="text-center">
-        <h2>Itens do Grupo</h2>
+        <h1>📜 Itens do Grupo</h1>
       </v-col>
     </v-row>
 

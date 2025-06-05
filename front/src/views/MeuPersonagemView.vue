@@ -2,7 +2,7 @@
     <v-container class="fill-height d-flex flex-column align-center justify-start pt-10">
         <v-row justify="center">
             <v-col cols="12" class="text-center">
-                <h2>Meu Personagem</h2>
+                <h1>🧙‍♂️ Meu Personagem</h1>
             </v-col>
         </v-row>
 

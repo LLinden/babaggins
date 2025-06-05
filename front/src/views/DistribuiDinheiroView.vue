@@ -2,7 +2,7 @@
     <v-container class="fill-height d-flex flex-column align-center justify-start pt-10">
         <v-row justify="center" class="mb-6">
             <v-col cols="12" class="text-center">
-                <h2>Distribuir Dinheiro</h2>
+                <h1>🪙 Distribuir Dinheiro</h1>
                 <br /><br />
                 <p>Há {{ tamanhoGrupo }} membros no grupo</p>
             </v-col>
