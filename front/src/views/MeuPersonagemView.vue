@@ -23,8 +23,10 @@
                 <ul>
                     <li v-for="item in itens" :key="item.id">
                         Nome: {{ item.nome_item }}, Quantidade: {{ item.quantidade }}, Descrição: {{ item.descricao }}
+                        <v-icon color="green" class="ml-2 cursor-pointer"
+                            @click="aumentarQuantidade(item)">mdi-plus-circle</v-icon>
                         <v-icon color="red" class="ml-2 cursor-pointer"
-                            @click="abrirModal(item)">mdi-minus-circle</v-icon>
+                            @click="diminuirQuantidade(item)">mdi-minus-circle</v-icon>
                     </li>
                 </ul>
 
@@ -33,9 +35,7 @@
                     <v-card>
                         <v-card-title class="headline">Remover Itens</v-card-title>
                         <v-card-text>
-                            Quantas unidades deseja remover de <strong>{{ itemSelecionado?.nome_item }}</strong>?
-                            <v-text-field v-model.number="quantidadeARemover" type="number" min="1"
-                                :max="itemSelecionado?.quantidade" label="Quantidade" dense />
+                            Deseja realmente remover <strong>{{ itemSelecionado?.nome_item }}</strong>?
                         </v-card-text>
                         <v-card-actions>
                             <v-spacer />
@@ -100,35 +100,69 @@ async function buscarPersonagem() {
     }
 }
 
-function abrirModal(item) {
-  itemSelecionado.value = item
-  quantidadeARemover.value = 1
-  dialog.value = true
+function diminuirQuantidade(item) {
+    if (item.quantidade <= 1) {
+        itemSelecionado.value = item
+        quantidadeARemover.value = 1
+        dialog.value = true
+    } else {
+        // Diminui diretamente
+        const novaQuantidade = item.quantidade - 1
+        axios.put(`http://localhost:3000/itens/${item.id}`, {
+            ...item,
+            quantidade: novaQuantidade
+        })
+            .then(() => {
+                const i = itens.value.findIndex(i => i.id === item.id)
+                if (i !== -1) itens.value[i].quantidade = novaQuantidade
+            })
+            .catch(error => {
+                console.error('Erro ao diminuir item:', error)
+                alert('Erro ao diminuir item.')
+            })
+    }
 }
 
 async function removerItem() {
-  const item = itemSelecionado.value
-  const novaQuantidade = item.quantidade - quantidadeARemover.value
+    const item = itemSelecionado.value
+    const novaQuantidade = item.quantidade - quantidadeARemover.value
 
-  try {
-    if (novaQuantidade <= 0) {
-      // Remove o item
-      await axios.delete(`http://localhost:3000/itens/${item.id}`)
-      itens.value = itens.value.filter(i => i.id !== item.id)
-    } else {
-      // Atualiza quantidade do item
-      await axios.put(`http://localhost:3000/itens/${item.id}`, {
-        ...item,
-        quantidade: novaQuantidade
-      })
-      const i = itens.value.findIndex(i => i.id === item.id)
-      if (i !== -1) itens.value[i].quantidade = novaQuantidade
+    try {
+        if (novaQuantidade <= 0) {
+            // Remove o item
+            await axios.delete(`http://localhost:3000/itens/${item.id}`)
+            itens.value = itens.value.filter(i => i.id !== item.id)
+        } else {
+            // Atualiza quantidade do item
+            await axios.put(`http://localhost:3000/itens/${item.id}`, {
+                ...item,
+                quantidade: novaQuantidade
+            })
+            const i = itens.value.findIndex(i => i.id === item.id)
+            if (i !== -1) itens.value[i].quantidade = novaQuantidade
+        }
+
+        dialog.value = false
+    } catch (error) {
+        console.error('Erro ao remover item:', error)
+        alert('Erro ao remover item.')
     }
+}
 
-    dialog.value = false
-  } catch (error) {
-    console.error('Erro ao remover item:', error)
-    alert('Erro ao remover item.')
-  }
+async function aumentarQuantidade(item) {
+    try {
+        const novaQuantidade = item.quantidade + 1
+
+        await axios.put(`http://localhost:3000/itens/${item.id}`, {
+            ...item,
+            quantidade: novaQuantidade
+        })
+
+        const i = itens.value.findIndex(i => i.id === item.id)
+        if (i !== -1) itens.value[i].quantidade = novaQuantidade
+    } catch (error) {
+        console.error('Erro ao aumentar item:', error)
+        alert('Erro ao aumentar item.')
+    }
 }
 </script>
