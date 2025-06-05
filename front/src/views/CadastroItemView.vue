@@ -125,4 +125,8 @@ async function cadastrarItem() {
     text-transform: none;
     padding: 6px 12px;
 }
+
+.v-row {
+    flex: none;
+}
 </style>
