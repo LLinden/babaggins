@@ -1,69 +1,32 @@
 <template>
-  <v-container class="fill-height d-flex flex-column align-center justify-center">
-    <v-row justify="center" class="mb-6">
+  <v-container class="fill-height d-flex flex-column align-center justify-start pt-10">
+    <v-row justify="center" class="mb-2">
       <v-col cols="12" class="text-center">
         <h2>Cadastro de Personagem</h2>
       </v-col>
     </v-row>
 
     <v-form v-model="valid" @submit.prevent="cadastrarPersonagem">
-      <v-row class="align-center mb-3" justify="center">
-        <v-col cols="auto">
-          <label for="nome">Nome:</label>
-        </v-col>
-        <v-col cols="auto">
-          <v-text-field
-            id="nome"
-            v-model="nome"
-            :rules="nomeRules"
-            maxlength="50"
-            hide-details="auto"
-            dense
-            variant="outlined"
-            class="input-field"
-          />
-        </v-col>
-      </v-row>
-
-      <v-row class="align-center mb-5" justify="center">
-        <v-col cols="auto">
-          <label for="dinheiro">Dinheiro Inicial:</label>
-        </v-col>
-        <v-col cols="auto">
-          <v-text-field
-            id="dinheiro"
-            v-model="dinheiro"
-            :rules="dinheiroRules"
-            maxlength="50"
-            hide-details="auto"
-            dense
-            variant="outlined"
-            class="input-field"
-          />
-        </v-col>
-      </v-row>
-
-      <v-row justify="center" class="mb-2">
-        <v-col cols="auto">
-          <v-btn
-            color="primary"
-            class="form-button"
-            outlined
-            type="submit"
-          >
-            Cadastrar
-          </v-btn>
+      <v-row justify="center">
+        <v-col cols="12" class="mx-auto" style="max-width: 500px;">
+          <v-text-field label="Nome" v-model="nome" :rules="nomeRules" maxlength="50" hide-details="auto" dense
+            variant="outlined" class="input-field" />
         </v-col>
       </v-row>
 
       <v-row justify="center">
-        <v-col cols="auto">
-          <v-btn
-            color="secondary"
-            class="form-button"
-            outlined
-            @click="voltar"
-          >
+        <v-col cols="12" class="mx-auto" style="max-width: 500px;">
+          <v-text-field label="Dinheiro Inicial" v-model="dinheiro" :rules="dinheiroRules" maxlength="50"
+            hide-details="auto" dense variant="outlined" class="input-field" />
+        </v-col>
+      </v-row>
+
+      <v-row justify="center" class="mb-2">
+        <v-col cols="auto" class="d-flex" style="gap: 8px;">
+          <v-btn color="primary" class="form-button" outlined type="submit">
+            Cadastrar
+          </v-btn>
+          <v-btn color="secondary" class="form-button" outlined @click="voltar">
             Voltar
           </v-btn>
         </v-col>
@@ -117,13 +80,19 @@ async function cadastrarPersonagem() {
 
 <style scoped>
 .input-field {
-  width: 250px;
+  width: 100%;
 }
 
 .form-button {
-  min-width: 200px;
-  min-height: 60px;
-  font-size: 1.1rem;
+  min-width: 140px;
+  min-height: 40px;
+  font-size: 0.95rem;
   text-transform: none;
+  padding: 6px 12px;
+}
+
+.v-row {
+  flex: none;
+  margin-top: 0px;
 }
 </style>

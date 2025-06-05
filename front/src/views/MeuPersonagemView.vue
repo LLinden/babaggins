@@ -13,13 +13,11 @@
             </v-col>
         </v-row>
 
-        <v-row justify="center" class="mb-4" align="center" dense>
-            <v-col cols="auto" class="pr-2">
+        <v-row justify="center">
+            <v-col cols="auto" class="d-flex" style="gap: 8px;">
                 <v-btn color="primary" class="button" @click="buscarPersonagem">
                     Buscar
                 </v-btn>
-            </v-col>
-            <v-col cols="auto" class="pl-2">
                 <v-btn color="secondary" class="button" @click="voltar">
                     Voltar
                 </v-btn>
@@ -42,7 +40,7 @@
                         <ul class="indent-list">
                             <li v-for="item in itens" :key="item.id">
                                 Nome: {{ item.nome_item }}, Quantidade: {{ item.quantidade }}, Descrição: {{
-                                item.descricao }}
+                                    item.descricao }}
                                 <v-icon color="green" class="ml-2 cursor-pointer"
                                     @click="aumentarQuantidade(item)">mdi-plus-circle</v-icon>
                                 <v-icon color="red" class="ml-2 cursor-pointer"
@@ -248,18 +246,21 @@ async function aumentarQuantidade(item) {
 <style scoped>
 .button {
     min-width: 140px;
-    min-height: 50px;
-    font-size: 1rem;
+    min-height: 40px;
+    font-size: 0.95rem;
     text-transform: none;
-    padding: 8px 12px;
+    padding: 6px 12px;
 }
 
 .indent-list {
     padding-left: 1.5rem;
-    /* ou 24px */
     list-style-type: disc;
     margin-top: 0;
     margin-bottom: 0;
+}
+
+.v-row {
+    flex: none;
 }
 
 .v-row>.v-col {
