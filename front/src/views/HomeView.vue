@@ -2,7 +2,7 @@
     <v-container class="fill-height d-flex flex-column align-center justify-center">
         <v-row justify="center">
             <v-col cols="12" class="text-center">
-                <h1>💰 BaBaggins 💰</h1>
+                <h1 class="titulo">💰 BaBaggins 💰</h1>
             </v-col>
         </v-row>
 
@@ -81,6 +81,27 @@ function goTo(routeName) {
     .home-button {
         font-size: 0.63rem;
         line-height: 1rem;
+    }
+}
+
+.titulo {
+    font-size: 3em;
+    font-weight: bold;
+    background: linear-gradient(90deg, #fff, #f0f, #0ff, #fff);
+    background-size: 200% auto;
+    color: transparent;
+    background-clip: text;
+    -webkit-background-clip: text;
+    animation: brilharGradiente 2s linear infinite;
+}
+
+@keyframes brilharGradiente {
+    0% {
+        background-position: 0% center;
+    }
+
+    100% {
+        background-position: 200% center;
     }
 }
 </style>
