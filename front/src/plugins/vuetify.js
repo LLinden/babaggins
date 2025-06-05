@@ -7,4 +7,14 @@ import * as directives from "vuetify/directives";
 export default createVuetify({
   components,
   directives,
+  theme: {
+    defaultTheme: 'dark',
+    themes: {
+      dark: {
+        colors: {
+          background: '#282a36',
+        },
+      },
+    },
+  },
 });

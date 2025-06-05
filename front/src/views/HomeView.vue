@@ -77,13 +77,6 @@ function goTo(routeName) {
     margin-bottom: 8px;
 }
 
-@media (max-width: 600px) {
-    .home-button {
-        font-size: 0.63rem;
-        line-height: 1rem;
-    }
-}
-
 .titulo {
     font-size: 3em;
     font-weight: bold;
@@ -93,6 +86,21 @@ function goTo(routeName) {
     background-clip: text;
     -webkit-background-clip: text;
     animation: brilharGradiente 2s linear infinite;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    text-align: center;
+    max-width: 100%;
+}
+
+@media (max-width: 600px) {
+    .titulo {
+        font-size: 2em;
+    }
+
+    .home-button {
+        font-size: 0.63rem;
+        line-height: 1rem;
+    }
 }
 
 @keyframes brilharGradiente {
