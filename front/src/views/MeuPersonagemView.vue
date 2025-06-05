@@ -5,77 +5,88 @@
                 <h2>Meu Personagem</h2>
             </v-col>
         </v-row>
-        <v-row justify="center" class="mb-4">
+
+        <v-row justify="center">
             <v-col cols="8" class="text-center">
-                <v-text-field label="Nome do Personagem" v-model="nomeBusca" @keyup.enter="buscarPersonagem" outlined
-                    dense />
+                <v-text-field label="Nome do Personagem" size="50" v-model="nomeBusca" @keyup.enter="buscarPersonagem"
+                    outlined dense />
             </v-col>
-            <v-col cols="auto">
-                <v-btn color="primary" @click="buscarPersonagem">Buscar</v-btn>
+        </v-row>
+
+        <v-row justify="center" class="mb-4" align="center" dense>
+            <v-col cols="auto" class="pr-2">
+                <v-btn color="primary" class="button" @click="buscarPersonagem">
+                    Buscar
+                </v-btn>
+            </v-col>
+            <v-col cols="auto" class="pl-2">
+                <v-btn color="secondary" class="button" @click="voltar">
+                    Voltar
+                </v-btn>
             </v-col>
         </v-row>
 
         <v-row justify="center" v-if="personagem && personagem.nome">
-            <v-col cols="auto">
-                <p><strong>Nome:</strong> {{ personagem.nome }}</p>
-                <p><strong>Dinheiro:</strong> {{ personagem.dinheiro }}
-                    <v-icon color="green" class="ml-2 cursor-pointer"
-                        @click="abrirDialogDinheiro(true)">mdi-plus-circle</v-icon>
-                    <v-icon color="red" class="ml-2 cursor-pointer"
-                        @click="abrirDialogDinheiro(false)">mdi-minus-circle</v-icon>
-                </p>
-                <p><strong>Itens:</strong></p>
-                <ul>
-                    <li v-for="item in itens" :key="item.id">
-                        Nome: {{ item.nome_item }}, Quantidade: {{ item.quantidade }}, Descrição: {{ item.descricao }}
-                        <v-icon color="green" class="ml-2 cursor-pointer"
-                            @click="aumentarQuantidade(item)">mdi-plus-circle</v-icon>
-                        <v-icon color="red" class="ml-2 cursor-pointer"
-                            @click="diminuirQuantidade(item)">mdi-minus-circle</v-icon>
-                    </li>
-                </ul>
+            <v-col cols="10" md="6">
+                <v-card outlined class="pa-4">
+                    <v-card-title class="headline">{{ personagem.nome }}</v-card-title>
+                    <v-card-text>
+                        <p><strong>Dinheiro:</strong> {{ personagem.dinheiro }}
+                            <v-icon color="green" class="ml-2 cursor-pointer"
+                                @click="abrirDialogDinheiro(true)">mdi-plus-circle</v-icon>
+                            <v-icon color="red" class="ml-2 cursor-pointer"
+                                @click="abrirDialogDinheiro(false)">mdi-minus-circle</v-icon>
+                        </p>
 
-                <!-- Modal de confirmação -->
-                <v-dialog v-model="dialog" max-width="400">
-                    <v-card>
-                        <v-card-title class="headline">Remover Itens</v-card-title>
-                        <v-card-text>
-                            Deseja realmente remover <strong>{{ itemSelecionado?.nome_item }}</strong>?
-                        </v-card-text>
-                        <v-card-actions>
-                            <v-spacer />
-                            <v-btn text @click="dialog = false">Cancelar</v-btn>
-                            <v-btn color="red" @click="removerItem">Remover</v-btn>
-                        </v-card-actions>
-                    </v-card>
-                </v-dialog>
-
-                <!-- Modal de atualização de dinheiro -->
-                <v-dialog v-model="dialogDinheiro" max-width="400">
-                    <v-card>
-                        <v-card-title class="headline">
-                            {{ somandoDinheiro ? 'Adicionar Dinheiro' : 'Remover Dinheiro' }}
-                        </v-card-title>
-                        <v-card-text>
-                            <v-text-field v-model.number="valorDinheiro" type="number" :min="1" label="Valor" dense />
-                        </v-card-text>
-                        <v-card-actions>
-                            <v-spacer />
-                            <v-btn text @click="dialogDinheiro = false">Cancelar</v-btn>
-                            <v-btn color="primary" @click="alterarDinheiro">
-                                {{ somandoDinheiro ? 'Adicionar' : 'Remover' }}
-                            </v-btn>
-                        </v-card-actions>
-                    </v-card>
-                </v-dialog>
+                        <p><strong>Itens:</strong></p>
+                        <ul class="indent-list">
+                            <li v-for="item in itens" :key="item.id">
+                                Nome: {{ item.nome_item }}, Quantidade: {{ item.quantidade }}, Descrição: {{
+                                item.descricao }}
+                                <v-icon color="green" class="ml-2 cursor-pointer"
+                                    @click="aumentarQuantidade(item)">mdi-plus-circle</v-icon>
+                                <v-icon color="red" class="ml-2 cursor-pointer"
+                                    @click="diminuirQuantidade(item)">mdi-minus-circle</v-icon>
+                            </li>
+                        </ul>
+                    </v-card-text>
+                </v-card>
             </v-col>
         </v-row>
 
-        <v-row justify="center" class="mt-8">
-            <v-col cols="8" class="text-center">
-                <v-btn color="secondary" @click="voltar">Voltar</v-btn>
-            </v-col>
-        </v-row>
+        <!-- Modal de confirmação -->
+        <v-dialog v-model="dialog" max-width="400">
+            <v-card>
+                <v-card-title class="headline">Remover Itens</v-card-title>
+                <v-card-text>
+                    Deseja realmente remover <strong>{{ itemSelecionado?.nome_item }}</strong>?
+                </v-card-text>
+                <v-card-actions>
+                    <v-spacer />
+                    <v-btn text @click="dialog = false">Cancelar</v-btn>
+                    <v-btn color="red" @click="removerItem">Remover</v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
+
+        <!-- Modal de atualização de dinheiro -->
+        <v-dialog v-model="dialogDinheiro" max-width="400">
+            <v-card>
+                <v-card-title class="headline">
+                    {{ somandoDinheiro ? "Adicionar Dinheiro" : "Remover Dinheiro" }}
+                </v-card-title>
+                <v-card-text>
+                    <v-text-field v-model.number="valorDinheiro" type="number" :min="1" label="Valor" dense />
+                </v-card-text>
+                <v-card-actions>
+                    <v-spacer />
+                    <v-btn text @click="dialogDinheiro = false">Cancelar</v-btn>
+                    <v-btn color="primary" @click="alterarDinheiro">
+                        {{ somandoDinheiro ? "Adicionar" : "Remover" }}
+                    </v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
     </v-container>
 </template>
 
@@ -233,3 +244,27 @@ async function aumentarQuantidade(item) {
     }
 }
 </script>
+
+<style scoped>
+.button {
+    min-width: 140px;
+    min-height: 50px;
+    font-size: 1rem;
+    text-transform: none;
+    padding: 8px 12px;
+}
+
+.indent-list {
+    padding-left: 1.5rem;
+    /* ou 24px */
+    list-style-type: disc;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.v-row>.v-col {
+    flex-grow: 0;
+    flex-shrink: 0;
+    flex: none;
+}
+</style>

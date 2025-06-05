@@ -4,6 +4,7 @@ import CadastrarPersonagemView from "@/views/CadastroPersonagemView.vue";
 import MeuPersonagemView from "@/views/MeuPersonagemView.vue";
 import CadastrarItemView from "@/views/CadastroItemView.vue";
 import ItensGrupoView from "@/views/ItensGrupoView.vue";
+import DistribuiDinheiroView from "@/views/DistribuiDinheiroView.vue";
 
 const routes = [
   {
@@ -30,6 +31,11 @@ const routes = [
     path: "/itens-grupo",
     name: "ItensGrupo",
     component: ItensGrupoView,
+  },
+  {
+    path: "/distribui-dinheiro",
+    name: "DistribuiDinheiro",
+    component: DistribuiDinheiroView,
   }
 ];
 
