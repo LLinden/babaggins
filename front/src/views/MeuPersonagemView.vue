@@ -18,7 +18,12 @@
         <v-row justify="center" v-if="personagem && personagem.nome">
             <v-col cols="auto">
                 <p><strong>Nome:</strong> {{ personagem.nome }}</p>
-                <p><strong>Dinheiro:</strong> {{ personagem.dinheiro }}</p>
+                <p><strong>Dinheiro:</strong> {{ personagem.dinheiro }}
+                    <v-icon color="green" class="ml-2 cursor-pointer"
+                        @click="abrirDialogDinheiro(true)">mdi-plus-circle</v-icon>
+                    <v-icon color="red" class="ml-2 cursor-pointer"
+                        @click="abrirDialogDinheiro(false)">mdi-minus-circle</v-icon>
+                </p>
                 <p><strong>Itens:</strong></p>
                 <ul>
                     <li v-for="item in itens" :key="item.id">
@@ -41,6 +46,25 @@
                             <v-spacer />
                             <v-btn text @click="dialog = false">Cancelar</v-btn>
                             <v-btn color="red" @click="removerItem">Remover</v-btn>
+                        </v-card-actions>
+                    </v-card>
+                </v-dialog>
+
+                <!-- Modal de atualização de dinheiro -->
+                <v-dialog v-model="dialogDinheiro" max-width="400">
+                    <v-card>
+                        <v-card-title class="headline">
+                            {{ somandoDinheiro ? 'Adicionar Dinheiro' : 'Remover Dinheiro' }}
+                        </v-card-title>
+                        <v-card-text>
+                            <v-text-field v-model.number="valorDinheiro" type="number" :min="1" label="Valor" dense />
+                        </v-card-text>
+                        <v-card-actions>
+                            <v-spacer />
+                            <v-btn text @click="dialogDinheiro = false">Cancelar</v-btn>
+                            <v-btn color="primary" @click="alterarDinheiro">
+                                {{ somandoDinheiro ? 'Adicionar' : 'Remover' }}
+                            </v-btn>
                         </v-card-actions>
                     </v-card>
                 </v-dialog>
@@ -68,6 +92,9 @@ const itens = ref([])
 const dialog = ref(false)
 const itemSelecionado = ref(null)
 const quantidadeARemover = ref(1)
+const dialogDinheiro = ref(false)
+const somandoDinheiro = ref(true)
+const valorDinheiro = ref(1)
 
 function voltar() {
     router.push({ name: 'Home' })
@@ -97,6 +124,46 @@ async function buscarPersonagem() {
     } catch (error) {
         console.error(error)
         alert('Erro ao buscar personagem.')
+    }
+}
+
+function abrirDialogDinheiro(somar) {
+    somandoDinheiro.value = somar
+    valorDinheiro.value = 1
+    dialogDinheiro.value = true
+}
+
+async function alterarDinheiro() {
+    if (!personagem.value) return
+
+    // Validação: apenas inteiros positivos
+    if (!Number.isInteger(valorDinheiro.value) || valorDinheiro.value <= 0) {
+        alert('Digite um valor inteiro positivo.')
+        return
+    }
+
+    const valor = somandoDinheiro.value
+        ? valorDinheiro.value
+        : -valorDinheiro.value
+
+    const novoValor = personagem.value.dinheiro + valor
+
+    // Validação: não deixar o dinheiro ficar negativo
+    if (novoValor < 0) {
+        alert('Dinheiro não pode ser negativo.')
+        return
+    }
+
+    try {
+        const res = await axios.put(`http://localhost:3000/personagens/${personagem.value.id}/dinheiro`, {
+            valor
+        })
+
+        personagem.value.dinheiro = res.data.dinheiro
+        dialogDinheiro.value = false
+    } catch (error) {
+        console.error('Erro ao atualizar dinheiro:', error)
+        alert('Erro ao atualizar dinheiro.')
     }
 }
 
