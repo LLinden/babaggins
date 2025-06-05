@@ -80,7 +80,6 @@ function goTo(routeName) {
 @media (max-width: 600px) {
     .home-button {
         font-size: 0.63rem;
-        /* ou outro valor menor que 0.8rem */
         line-height: 1rem;
     }
 }
