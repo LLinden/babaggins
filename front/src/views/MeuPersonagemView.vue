@@ -91,7 +91,7 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import axios from 'axios'
+import { buscarPersonagemApi, alterarDinheiroApi, aumentarQuantidadeApi, diminuirQuantidadeApi, removerItemApi } from '../api/api'
 
 const router = useRouter()
 
@@ -114,22 +114,13 @@ async function buscarPersonagem() {
     itens.value = []
 
     try {
-        // Passo 1: Buscar todos os personagens
-        const res = await axios.get('http://localhost:3000/personagens')
-        const encontrado = res.data.find(p => p.nome.toLowerCase() === nomeBusca.value.trim().toLowerCase())
-
-        if (!encontrado) {
+        const { personagemData, itensData } = await buscarPersonagemApi(nomeBusca.value)
+        if (!personagemData) {
             alert('Personagem não encontrado.')
             return
         }
-
-        // Passo 2: Buscar os dados completos do personagem pelo ID
-        const personagemRes = await axios.get(`http://localhost:3000/personagens/${encontrado.id}`)
-        personagem.value = personagemRes.data[0]
-
-        // Passo 3: Buscar itens do personagem
-        const itensRes = await axios.get(`http://localhost:3000/itens/${encontrado.id}`)
-        itens.value = itensRes.data
+        personagem.value = personagemData
+        itens.value = itensData
     } catch (error) {
         console.error(error)
         alert('Erro ao buscar personagem.')
@@ -145,7 +136,6 @@ function abrirDialogDinheiro(somar) {
 async function alterarDinheiro() {
     if (!personagem.value) return
 
-    // Validação: apenas inteiros positivos
     if (!Number.isInteger(valorDinheiro.value) || valorDinheiro.value <= 0) {
         alert('Digite um valor inteiro positivo.')
         return
@@ -156,19 +146,14 @@ async function alterarDinheiro() {
         : -valorDinheiro.value
 
     const novoValor = personagem.value.dinheiro + valor
-
-    // Validação: não deixar o dinheiro ficar negativo
     if (novoValor < 0) {
         alert('Dinheiro não pode ser negativo.')
         return
     }
 
     try {
-        const res = await axios.put(`http://localhost:3000/personagens/${personagem.value.id}/dinheiro`, {
-            valor
-        })
-
-        personagem.value.dinheiro = res.data.dinheiro
+        const dinheiroAtualizado = await alterarDinheiroApi(personagem.value.id, valor)
+        personagem.value.dinheiro = dinheiroAtualizado
         dialogDinheiro.value = false
     } catch (error) {
         console.error('Erro ao atualizar dinheiro:', error)
@@ -176,26 +161,20 @@ async function alterarDinheiro() {
     }
 }
 
-function diminuirQuantidade(item) {
+async function diminuirQuantidade(item) {
     if (item.quantidade <= 1) {
         itemSelecionado.value = item
         quantidadeARemover.value = 1
         dialog.value = true
     } else {
-        // Diminui diretamente
-        const novaQuantidade = item.quantidade - 1
-        axios.put(`http://localhost:3000/itens/${item.id}`, {
-            ...item,
-            quantidade: novaQuantidade
-        })
-            .then(() => {
-                const i = itens.value.findIndex(i => i.id === item.id)
-                if (i !== -1) itens.value[i].quantidade = novaQuantidade
-            })
-            .catch(error => {
-                console.error('Erro ao diminuir item:', error)
-                alert('Erro ao diminuir item.')
-            })
+        try {
+            const novaQuantidade = await diminuirQuantidadeApi(item, 1)
+            const i = itens.value.findIndex(i => i.id === item.id)
+            if (i !== -1) itens.value[i].quantidade = novaQuantidade
+        } catch (error) {
+            console.error('Erro ao diminuir item:', error)
+            alert('Erro ao diminuir item.')
+        }
     }
 }
 
@@ -205,19 +184,13 @@ async function removerItem() {
 
     try {
         if (novaQuantidade <= 0) {
-            // Remove o item
-            await axios.delete(`http://localhost:3000/itens/${item.id}`)
+            await removerItemApi(item.id)
             itens.value = itens.value.filter(i => i.id !== item.id)
         } else {
-            // Atualiza quantidade do item
-            await axios.put(`http://localhost:3000/itens/${item.id}`, {
-                ...item,
-                quantidade: novaQuantidade
-            })
+            const quantidadeAtualizada = await diminuirQuantidadeApi(item, quantidadeARemover.value)
             const i = itens.value.findIndex(i => i.id === item.id)
-            if (i !== -1) itens.value[i].quantidade = novaQuantidade
+            if (i !== -1) itens.value[i].quantidade = quantidadeAtualizada
         }
-
         dialog.value = false
     } catch (error) {
         console.error('Erro ao remover item:', error)
@@ -227,13 +200,7 @@ async function removerItem() {
 
 async function aumentarQuantidade(item) {
     try {
-        const novaQuantidade = item.quantidade + 1
-
-        await axios.put(`http://localhost:3000/itens/${item.id}`, {
-            ...item,
-            quantidade: novaQuantidade
-        })
-
+        const novaQuantidade = await aumentarQuantidadeApi(item, 1)
         const i = itens.value.findIndex(i => i.id === item.id)
         if (i !== -1) itens.value[i].quantidade = novaQuantidade
     } catch (error) {

@@ -33,7 +33,7 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import axios from 'axios'
+import { getItensGrupoApi } from '../api/api'
 
 const router = useRouter()
 
@@ -52,16 +52,7 @@ function voltar() {
 
 onMounted(async () => {
   try {
-    const res = await axios.get('http://localhost:3000/itens')
-    const personagens = await axios.get('http://localhost:3000/personagens')
-    const personagemMap = Object.fromEntries(personagens.data.map(p => [p.id, p.nome]))
-
-    itens.value = res.data.map(item => ({
-      nome: item.nome_item,
-      quantidade: item.quantidade,
-      descricao: item.descricao,
-      personagemNome: personagemMap[item.personagem_id]
-    }))
+    itens.value = await getItensGrupoApi()
   } catch (error) {
     console.error('Erro ao carregar itens:', error)
     alert('Erro ao carregar itens.')

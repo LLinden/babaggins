@@ -52,7 +52,7 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import axios from 'axios'
+import { cadastrarItemApi } from '../api/api'
 
 const router = useRouter()
 const nome = ref('')
@@ -88,18 +88,9 @@ async function cadastrarItem() {
     if (!valid.value) return
 
     try {
-        // Buscar todos os personagens para enviar o id do personagem dono do item
-        const res = await axios.get('http://localhost:3000/personagens')
-        const encontrado = res.data.find(p => p.nome.toLowerCase().trim() === personagem.value.toLowerCase().trim())
-
-        if (!encontrado) {
-            alert('Personagem não encontrado.')
-            return
-        }
-
-        await axios.post('http://localhost:3000/itens', {
-            personagem_id: encontrado.id,
-            nome_item: nome.value,
+        await cadastrarItemApi({
+            personagemNome: personagem.value,
+            nome: nome.value,
             descricao: descricao.value,
             quantidade: quantidade.value
         })
@@ -107,7 +98,7 @@ async function cadastrarItem() {
         alert('Item cadastrado com sucesso!')
         router.push({ name: 'Home' })
     } catch (error) {
-        alert('Erro ao cadastrar personagem.')
+        alert(error.message || 'Erro ao cadastrar personagem.')
         console.error(error)
     }
 }

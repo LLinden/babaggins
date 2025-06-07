@@ -3,7 +3,11 @@ const cors = require("cors");
 const sqlite3 = require("sqlite3").verbose();
 
 const app = express();
-app.use(cors());
+app.use(
+  cors({
+    origin: "https://babaggins-web.onrender.com",
+  })
+);
 app.use(express.json());
 
 // Conecta ao banco (cria o arquivo se não existir)

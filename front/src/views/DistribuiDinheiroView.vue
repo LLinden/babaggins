@@ -34,7 +34,7 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import axios from 'axios'
+import { getPersonagensApi, distribuirDinheiroApi } from '../api/api'
 
 const router = useRouter()
 const tamanhoGrupo = ref(0)
@@ -54,8 +54,8 @@ function voltar() {
 
 onMounted(async () => {
     try {
-        const res = await axios.get('http://localhost:3000/personagens')
-        personagens.value = res.data
+        const personagensData = await getPersonagensApi()
+        personagens.value = personagensData
         tamanhoGrupo.value = personagens.value.length
     } catch (error) {
         console.error('Erro ao buscar personagens:', error)
@@ -73,28 +73,11 @@ async function distribuirDinheiro() {
     }
 
     try {
-        const res = await axios.get('http://localhost:3000/personagens')
-        const personagens = res.data
-        const quantidade = personagens.length
-        if (quantidade === 0) {
-            alert('Não há personagens para distribuir dinheiro.')
-            return
-        }
-
-        // Divide o valor total pelo número de personagens
-        const valorPorPersonagem = Math.floor(valorTotal / quantidade)
-
-        // Para cada personagem, atualiza o dinheiro somando o valor proporcional
-        for (const personagem of personagens) {
-            await axios.put(`http://localhost:3000/personagens/${personagem.id}/dinheiro`, {
-                valor: valorPorPersonagem
-            })
-        }
-
-        alert(`Dinheiro distribuído: ${valorPorPersonagem} para cada um dos ${quantidade} membros.`)
+        await distribuirDinheiroApi(valorTotal)
+        alert('Dinheiro distribuído com sucesso!')
         router.push({ name: 'Home' })
     } catch (error) {
-        alert('Erro ao distribuir dinheiro.')
+        alert(error.message || 'Erro ao distribuir dinheiro.')
         console.error(error)
     }
 }
