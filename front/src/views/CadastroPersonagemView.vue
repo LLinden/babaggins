@@ -38,7 +38,7 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import axios from 'axios'
+import { cadastrarPersonagemApi } from '../api/api'
 
 const router = useRouter()
 const nome = ref('')
@@ -64,7 +64,7 @@ async function cadastrarPersonagem() {
   if (!valid.value) return
 
   try {
-    await axios.post('http://localhost:3000/personagens', {
+    await cadastrarPersonagemApi({
       nome: nome.value,
       dinheiro: parseInt(dinheiro.value, 10),
     })
@@ -72,7 +72,7 @@ async function cadastrarPersonagem() {
     alert('Personagem cadastrado com sucesso!')
     router.push({ name: 'Home' })
   } catch (error) {
-    alert('Erro ao cadastrar personagem.')
+    alert(error.message || 'Erro ao cadastrar personagem.')
     console.error(error)
   }
 }
